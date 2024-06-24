@@ -36,8 +36,8 @@ const submitChat = async () => {
             </div>
         </div>
         <div id="inputArea">
-            <input id="chatInput" v-model="chatInput" @keyup.enter="submitChat">
-            <button @click="submitChat" id="submitButton">Submit</button>
+            <Textarea v-model="chatInput" @keyup.enter="submitChat" id="chatInput" placeholder="Type a message..."></Textarea>
+            <Button @click="submitChat" id="submitButton">Submit</Button>
         </div>
     </div>
 </template>
@@ -62,5 +62,20 @@ const submitChat = async () => {
     bottom: 0;
     right: 0;
     overflow-y: auto;
+}
+
+#inputArea {
+    display: flex;
+    height: 100px;
+    width: 100%;
+    padding: 10px;
+    align-items: space-between;
+}
+
+#chatInput {
+    width: calc(100% - 82px);
+    height: 100%;
+    padding: 10px;
+    margin-right: 10px;
 }
 </style>
