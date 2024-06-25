@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, toRefs } from 'vue';
 import ollama from 'ollama';
 import ChatMessage from './ChatMessage.vue';
+import { useModelStore } from '@/stores/model';
+
+const modelStore = useModelStore()
+const { currentModel } = toRefs(modelStore)
 
 const chatInput = ref('')
 const messages = ref([{role: '', content: ''}]);
@@ -17,8 +21,9 @@ const submitChat = async () => {
     chatInput.value = '';
     const inputMessage = { role: 'user', content };
     messages.value.push(inputMessage);
+    console.log("Chatting with model: ", currentModel.value);
     const response = await ollama.chat({
-        model: 'phi3',
+        model: currentModel.value,
         messages: [inputMessage],
         stream: true
     });
