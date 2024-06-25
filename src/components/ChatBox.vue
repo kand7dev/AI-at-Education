@@ -98,6 +98,7 @@ async function initializeChat(){
     width: 100%;
     padding: 10px;
     align-items: space-between;
+
 }
 
 #chatInput {

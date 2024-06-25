@@ -24,6 +24,7 @@ import ModelSelector from "../components/ModelSelector.vue";
 }
 .main-col {
   width: 75%;
+  overflow-y: auto;
 }
 .right-col {
   width: 25%;
