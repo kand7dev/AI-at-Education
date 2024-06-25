@@ -1,22 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import ollama from 'ollama';
 import ChatMessage from './ChatMessage.vue';
 
+const chatInput = ref('')
+const messages = ref([{role: '', content: ''}]);
+const isFetching = ref(true);
 
-const initialize = async () => {
-    const response = await ollama.chat({
-        model: 'phi3',
-        messages: [{ role: 'user', content: `You're going to act as a teacher. You can't break character in any case. You're going to answer questions as if you're a teacher, remember that.`
-         }]
-    });
-    console.log('Initialized');
-    console.log(response.message.content)
-}
-initialize()
-const chatInput = ref('Why is the sky blue?')
-const messages = ref([{ role: 'agent', content: 'Hello, I am kand7dev. How can I help you today?'}]);
 const currentOutputMessageContent = ref('')
+
+onMounted(() => {
+    initializeChat()
+})
 const submitChat = async () => {
     const content = chatInput.value;
     chatInput.value = '';
@@ -27,27 +22,39 @@ const submitChat = async () => {
         messages: [inputMessage],
         stream: true
     });
-    for await (const part of response){
+    for await (const part of response) {
         currentOutputMessageContent.value += part.message.content
     }
     messages.value.push({ role: 'agent', content: currentOutputMessageContent.value })
     currentOutputMessageContent.value = ''
-    }
+}
+
+async function initializeChat(){
+    const response = await ollama.chat({
+        model: 'phi3',
+        messages: [{ role: 'user', content: `You're a personal AI teacher. You can't break character. You're going to provide information about topics the user asks about. Start by introduction yourself.` }]
+    });
+    console.log('Initialized');
+    messages.value[0] = ({ role: 'agent', content: response.message.content });
+    isFetching.value = false;
+}
+
 </script>
 
 <template>
-    <div id ="chatBox">
+    <div id="chatBox">
         <div id="chatContainer">
             <div id="chatArea" ref="chatArea"></div>
-            <div v-for="message in messages" :key="message.content">
-                <ChatMessage :message="message" />
-            </div>
+                <div v-if="!isFetching" v-for="message in messages" :key="message.content">
+                    <ChatMessage :message="message" />
+                </div>
             <div v-if="currentOutputMessageContent">
-                <ChatMessage :message="{role: 'agent', content: currentOutputMessageContent}"/>
+                <ChatMessage :message="{ role: 'agent', content: currentOutputMessageContent }" />
             </div>
         </div>
         <div id="inputArea">
-            <Textarea v-model="chatInput" @keyup.enter="submitChat" id="chatInput" placeholder="Type a message..."></Textarea>
+            <Textarea v-model="chatInput" @keyup.enter="submitChat" id="chatInput"
+                placeholder="Type a message..."></Textarea>
             <Button @click="submitChat" id="submitButton">Submit</Button>
         </div>
     </div>
@@ -57,7 +64,7 @@ const submitChat = async () => {
 
 </methods>
 
-<style scoped> 
+<style scoped>
 #chatBox {
     display: flex;
     height: 100%;
@@ -68,11 +75,12 @@ const submitChat = async () => {
     position: relative;
     width: 100%;
     height: calc(100% - 100px);
-    border: 3px dotted rgba(0, 0, 0, 0.473);
+    border: 1px solid grey;
+    border-radius: 8px;
     padding: 10px;
 }
 
-#chatArea { 
+#chatArea {
     position: absolute;
     top: 0;
     left: 0;
