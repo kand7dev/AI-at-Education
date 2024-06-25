@@ -10,12 +10,11 @@ import ModelSelector from "../components/ModelSelector.vue";
         <ChatBox></ChatBox>
       </div>
       <div class="right-col">
-        <ModelSelector/>
+        <ModelSelector />
       </div>
     </div>
   </main>
 </template>
-
 
 <style scoped>
 .flex-grid {
