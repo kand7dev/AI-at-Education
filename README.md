@@ -19,7 +19,7 @@ The model behaves as an AI tutor that can help understanding different concepts,
 The whole application is containerized, which means that the user don't have to install any dependencies on the machine. By default the model uses the CPU to generate responses.
 
 ## GPU Support
-If someone has a capable GPU, a small change in the `docker-compose.yaml` file can be done to run the model using the GPU. After the `endpoint` key we can add:
+If someone has a capable GPU, a small change in the `docker-compose.yaml` file can be made to run the model using the GPU. After the `endpoint` key we can add:
 
 ```yaml
     ...
