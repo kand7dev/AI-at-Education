@@ -12,11 +12,10 @@ services:
     restart: always
     entrypoint: ["/usr/bin/bash", "run-ollama.sh"]
   vueapp:
-    image: kand7dev99/kand7dev-projects:ollama-vue-v1
+    image: kand7dev99/kand7dev-projects:ollama-vuejs
     container_name: vue-frontend
     ports:
       - 8080:8080
-    depends_on:
-      - ollama
+
 volumes:
   ollama:
