@@ -16,4 +16,20 @@ The model behaves as an AI tutor that can help understanding different concepts,
   3. World facts
   4. and more
 
-The whole application is containerized, which means that the user don't have to install any dependencies on the machine.
+The whole application is containerized, which means that the user don't have to install any dependencies on the machine. By default the model uses the CPU to generate responses.
+If someone has a capable GPU, a small change in the `docker-compose.yaml` file can be done to run the model using the GPU. After the `endpoint` key we can add:
+
+```yaml
+    ...
+    ...
+    entrypoint: ["/usr/bin/bash", "run-ollama.sh"] 
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ...
+    ...
+```
