@@ -23,7 +23,6 @@ async function fetchData(){
     data.value = response;
   } catch (error) {
     console.log('Error fetching models. Retrying in 10 seconds.');
-
     setTimeout(fetchData, 10000);
   }
 }
